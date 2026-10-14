@@ -25,5 +25,12 @@ certs/
 inspect-p12.js
 
 # Logs
+log/
+logs/
+**/log/
+**/logs/
 *.log
+**/*.log
+*-audit.json
+**/*-audit.json
 npm-debug.log*

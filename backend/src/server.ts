@@ -1,9 +1,8 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import configRoutes from "./routes/config.routes.js";
-import tmsRoutes from "./routes/tms.routes.js";
-import paymentRoutes from "./routes/payment.routes.js";
+import routes from "./routes/index.js";
+import { errorMiddleware } from "./middlewares/error.middleware.js";
 
 const app = express();
 
@@ -17,9 +16,8 @@ app.get("/health", (_req, res) => {
   });
 });
 
-app.use("/api/config", configRoutes);
-app.use("/api/tms", tmsRoutes);
-app.use("/api/tms/payments", paymentRoutes);
+app.use("/api", routes);
+app.use(errorMiddleware);
 
 const PORT = Number(process.env.PORT) || 3001;
 

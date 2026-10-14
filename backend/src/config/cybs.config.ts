@@ -26,4 +26,5 @@ export const cybsConfig = {
   enableLog: process.env.CYBS_ENABLE_LOG === "true",
   logDirectory: path.resolve(process.cwd(), "logs"),
   logFilename: "cybs-lab",
+  includeRawResponse: process.env.NODE_ENV !== "production",
 };

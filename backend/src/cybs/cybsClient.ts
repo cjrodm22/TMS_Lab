@@ -2,7 +2,7 @@ import cybersourceRestClient from "cybersource-rest-client";
 import { cybsConfig } from "../config/cybs.config.js";
 
 export function getCybsConfigObject() {
-  return {
+  const baseConfig = {
     authenticationType: cybsConfig.authenticationType,
     runEnvironment: cybsConfig.runEnvironment,
     merchantID: cybsConfig.merchantID,
@@ -11,8 +11,15 @@ export function getCybsConfigObject() {
     keyPass: cybsConfig.keyPass,
     keyFileName: cybsConfig.keyFileName,
     keysDirectory: cybsConfig.keysDirectory,
+  };
 
-    enableLog: cybsConfig.enableLog,
+  if (!cybsConfig.enableLog) {
+    return baseConfig;
+  }
+
+  return {
+    ...baseConfig,
+    enableLog: true,
     logDirectory: cybsConfig.logDirectory,
     logFilename: cybsConfig.logFilename,
   };

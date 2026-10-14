@@ -1,0 +1,29 @@
+# Dependencias
+node_modules/
+**/node_modules/
+
+# Build
+dist/
+**/dist/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+
+# Certificados y llaves
+certs/
+**/certs/
+*.p12
+*.pem
+*.key
+*.crt
+
+# Archivos temporales de inspección
+inspect-p12.js
+
+# Logs
+*.log
+npm-debug.log*

@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import configRoutes from "./routes/config.routes.js";
 import tmsRoutes from "./routes/tms.routes.js";
-import cybersourceRestClient from "cybersource-rest-client";
+import paymentRoutes from "./routes/payment.routes.js";
 
 const app = express();
 
@@ -19,6 +19,7 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/config", configRoutes);
 app.use("/api/tms", tmsRoutes);
+app.use("/api/tms/payments", paymentRoutes);
 
 const PORT = Number(process.env.PORT) || 3001;
 

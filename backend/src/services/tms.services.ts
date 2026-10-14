@@ -101,3 +101,123 @@ export async function createInstrumentIdentifier(
 
   return await withTimeout(cybsRequest, 30000);
 }
+
+export interface CreatePaymentInstrumentInput {
+  instrumentIdentifierId: string;
+  card: {
+    expirationMonth: string;
+    expirationYear: string;
+    type?: string;
+  };
+  billTo?: {
+    firstName?: string;
+    lastName?: string;
+    address1?: string;
+    locality?: string;
+    administrativeArea?: string;
+    postalCode?: string;
+    country?: string;
+    email?: string;
+    phoneNumber?: string;
+  };
+}
+
+function sanitizePaymentInstrumentResponse(data: any) {
+  return {
+    id: data?.id,
+    object: data?.object,
+    state: data?.state,
+    instrumentIdentifier: data?.instrumentIdentifier,
+    card: {
+      expirationMonth: data?.card?.expirationMonth,
+      expirationYear: data?.card?.expirationYear,
+      type: data?.card?.type,
+    },
+    billTo: data?.billTo,
+    metadata: data?.metadata,
+    links: data?._links,
+  };
+}
+
+function buildPaymentInstrumentRequest(payload: CreatePaymentInstrumentInput) {
+  const requestObj = new cybersourceRestClient.PostPaymentInstrumentRequest();
+
+  requestObj.instrumentIdentifier = {
+    id: payload.instrumentIdentifierId,
+  };
+
+  requestObj.card = {
+    expirationMonth: payload.card.expirationMonth,
+    expirationYear: payload.card.expirationYear,
+  };
+
+  if (payload.billTo) {
+    requestObj.billTo = {
+      ...(payload.billTo.firstName && { firstName: payload.billTo.firstName }),
+      ...(payload.billTo.lastName && { lastName: payload.billTo.lastName }),
+      ...(payload.billTo.address1 && { address1: payload.billTo.address1 }),
+      ...(payload.billTo.locality && { locality: payload.billTo.locality }),
+      ...(payload.billTo.administrativeArea && {
+        administrativeArea: payload.billTo.administrativeArea,
+      }),
+      ...(payload.billTo.postalCode && {
+        postalCode: payload.billTo.postalCode,
+      }),
+      ...(payload.billTo.country && { country: payload.billTo.country }),
+      ...(payload.billTo.email && { email: payload.billTo.email }),
+      ...(payload.billTo.phoneNumber && {
+        phoneNumber: payload.billTo.phoneNumber,
+      }),
+    };
+  }
+
+  return requestObj;
+}
+
+export async function createPaymentInstrument(
+  payload: CreatePaymentInstrumentInput,
+) {
+  if (!payload?.instrumentIdentifierId) {
+    throw new Error("instrumentIdentifierId is required");
+  }
+
+  if (!payload?.card?.expirationMonth) {
+    throw new Error("card.expirationMonth is required");
+  }
+
+  if (!payload?.card?.expirationYear) {
+    throw new Error("card.expirationYear is required");
+  }
+
+  const configObject = getCybsConfigObject();
+
+  const apiInstance = new cybersourceRestClient.PaymentInstrumentApi(
+    configObject,
+  );
+
+  const requestObj = buildPaymentInstrumentRequest(payload);
+
+  const cybsRequest = new Promise<any>((resolve, reject) => {
+    try {
+      apiInstance.postPaymentInstrument(
+        requestObj,
+        {},
+        (error: any, data: any, response: any) => {
+          if (error) {
+            return reject(error);
+          }
+
+          return resolve({
+            raw: data,
+            sanitized: sanitizePaymentInstrumentResponse(data),
+            responseStatus: response?.status,
+          });
+        },
+      );
+    } catch (error) {
+      return reject(error);
+    }
+  });
+
+  return await withTimeout(cybsRequest, 30000);
+}

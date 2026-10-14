@@ -1,6 +1,9 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import "dotenv/config";
+import configRoutes from "./routes/config.routes.js";
+import tmsRoutes from "./routes/tms.routes.js";
+import cybersourceRestClient from "cybersource-rest-client";
 
 const app = express();
 
@@ -13,6 +16,9 @@ app.get("/health", (_req, res) => {
     message: "CYBS TMS Lab API running",
   });
 });
+
+app.use("/api/config", configRoutes);
+app.use("/api/tms", tmsRoutes);
 
 const PORT = Number(process.env.PORT) || 3001;
 

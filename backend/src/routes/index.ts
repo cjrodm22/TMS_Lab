@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { cybsConfig } from "../config/cybs.config.js";
-import paymentsRoutes from "../modules/payments/payments.routes.js";
+import paymentsRoutes, {
+  paymentOperationsRouter,
+} from "../modules/payments/payments.routes.js";
 import tmsRoutes from "../modules/tms/tms.routes.js";
 
 const router = Router();
@@ -21,6 +23,7 @@ router.get("/config/cybs", (_req, res) => {
 });
 
 router.use("/tms/payments", paymentsRoutes);
+router.use("/payments", paymentOperationsRouter);
 router.use("/tms", tmsRoutes);
 
 export default router;

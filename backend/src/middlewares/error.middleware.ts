@@ -7,13 +7,11 @@ export const errorMiddleware: ErrorRequestHandler = (
   res,
   _next,
 ) => {
-  if (!res.locals.errorMessage || !res.locals.errorLogLabel) {
-    _next(error);
-    return;
-  }
-
   const sanitizedError = sanitizeError(error);
-  const statusCode = error?.statusCode || error?.status || 500;
+  const statusCode =
+    sanitizedError.statusCode >= 400 && sanitizedError.statusCode <= 599
+      ? sanitizedError.statusCode
+      : 500;
 
   console.error(
     `${res.locals.errorLogLabel || "Unhandled request error"}:`,
@@ -22,7 +20,7 @@ export const errorMiddleware: ErrorRequestHandler = (
 
   res.status(statusCode).json({
     success: false,
-    message: res.locals.errorMessage || "Internal server error",
+    message: res.locals.errorMessage || sanitizedError.message,
     error: sanitizedError,
   });
 };

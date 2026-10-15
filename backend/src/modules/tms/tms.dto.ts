@@ -1,3 +1,10 @@
+import type { z } from "zod";
+import type {
+  patchInstrumentIdentifierSchema,
+  patchPaymentInstrumentSchema,
+  tokenIdParamsSchema,
+} from "./tms.schemas.js";
+
 export interface CreateInstrumentIdentifierInput {
   card: {
     number: string;
@@ -25,3 +32,13 @@ export interface CreatePaymentInstrumentInput {
     phoneNumber?: string;
   };
 }
+
+export type TokenIdParams = z.infer<typeof tokenIdParamsSchema>;
+
+export type PatchPaymentInstrumentInput = z.infer<
+  typeof patchPaymentInstrumentSchema
+>;
+
+export type PatchInstrumentIdentifierInput = z.infer<
+  typeof patchInstrumentIdentifierSchema
+>;

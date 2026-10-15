@@ -1,0 +1,9 @@
+process.env.NODE_ENV = "test";
+process.env.CYBS_RUN_ENVIRONMENT = "apitest.cybersource.com";
+process.env.CYBS_MERCHANT_ID = "unit-test-merchant";
+process.env.CYBS_AUTHENTICATION_TYPE = "jwt";
+process.env.CYBS_KEYS_DIRECTORY = ".";
+process.env.CYBS_KEY_FILE_NAME = "unit-test.p12";
+process.env.CYBS_KEY_PASS = "unit-test-password";
+process.env.CYBS_KEY_ALIAS = "unit-test-alias";
+process.env.CYBS_ENABLE_LOG = "false";
